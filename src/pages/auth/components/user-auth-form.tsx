@@ -17,6 +17,8 @@ import { Button } from '@/components/custom/button'
 import { PasswordInput } from '@/components/custom/password-input'
 import { cn } from '@/lib/utils'
 
+import api from '../../../api'
+
 interface UserAuthFormProps extends HTMLAttributes<HTMLDivElement> {}
 
 const formSchema = z.object({
@@ -45,13 +47,28 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     },
   })
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
+  async function onSubmit(data: z.infer<typeof formSchema>) {
     setIsLoading(true)
     console.log(data)
 
-    setTimeout(() => {
-      setIsLoading(false)
-    }, 3000)
+    // Call the login API
+    const response = await fetch(`${api}/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+
+    if (response.ok) {
+      // Handle successful login
+      console.log('Login successful')
+    } else {
+      // Handle error during login
+      console.log('Login failed')
+    }
+
+    setIsLoading(false)
   }
 
   return (
