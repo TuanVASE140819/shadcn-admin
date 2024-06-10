@@ -16,7 +16,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/custom/button'
 import { PasswordInput } from '@/components/custom/password-input'
 import { cn } from '@/lib/utils'
-
+import axios from 'axios'
 import api from '../../../api'
 
 interface UserAuthFormProps extends HTMLAttributes<HTMLDivElement> {}
@@ -52,17 +52,26 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     console.log(data)
 
     // Call the login API
-    const response = await fetch(`${api}/login`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    })
+    //     curl -X 'POST' \
+    //   'https://report-work.onrender.com/login' \
+    //   -H 'accept: application/json' \
+    //   -H 'Content-Type: application/json' \
+    //   -d '{
+    //   "username": "1234567@gmail.com",
+    //   "password": "1234567"
+    // }'
 
-    if (response.ok) {
+    const response = await api.post('/login', {
+      username: data.email,
+      password: data.password,
+    })
+    if (response && response.status === 200) {
       // Handle successful login
       console.log('Login successful')
+      console.log(response.data)
+      // Save the token to local storage
+      localStorage.setItem('token', response.data.token)
+      localStorage.setItem('user', JSON.stringify(response.data))
     } else {
       // Handle error during login
       console.log('Login failed')
