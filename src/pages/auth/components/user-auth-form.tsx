@@ -51,15 +51,6 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     setIsLoading(true)
     console.log(data)
 
-    // Call the login API
-    //     curl -X 'POST' \
-    //   'https://report-work.onrender.com/login' \
-    //   -H 'accept: application/json' \
-    //   -H 'Content-Type: application/json' \
-    //   -d '{
-    //   "username": "1234567@gmail.com",
-    //   "password": "1234567"
-    // }'
 
     const response = await api.post('/login', {
       username: data.email,
@@ -72,6 +63,9 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
       // Save the token to local storage
       localStorage.setItem('token', response.data.token)
       localStorage.setItem('user', JSON.stringify(response.data))
+
+      // Redirect to dashboard
+      window.location.href = '/'
     } else {
       // Handle error during login
       console.log('Login failed')
