@@ -2,14 +2,15 @@ import { createBrowserRouter } from 'react-router-dom'
 import GeneralError from './pages/errors/general-error'
 import NotFoundError from './pages/errors/not-found-error'
 import MaintenanceError from './pages/errors/maintenance-error'
-import SignIn from './pages/auth/sign-in'
+
+
 
 function isLoggedIn() {
   const user = localStorage.getItem('user')
-  console.log('user', user)
   return user !== null
-}
 
+  console.log('user', user)
+}
 const router = createBrowserRouter([
   // Auth routes
   {
@@ -25,6 +26,7 @@ const router = createBrowserRouter([
         lazy: async () => {
           // Check if user is logged in
           if (!isLoggedIn()) {
+            // If not, redirect to sign-in page
             return { Component: (await import('./pages/auth/sign-in')).default }
           }
           // If logged in, proceed to dashboard
@@ -73,14 +75,19 @@ const router = createBrowserRouter([
           Component: (await import('./pages/auth/otp')).default,
         }),
       },
+
+      // Profile
+      {
+        path: '/profile',
+        lazy: async () => ({
+          Component: (await import('./pages/settings/profile')).default,
+        }),
+      },
     ],
   },
 
   // Main routes
-  {
-    path: '/sign-in',
-    Component: SignIn,
-  },
+
   // Error routes
   { path: '/500', Component: GeneralError },
   { path: '/404', Component: NotFoundError },

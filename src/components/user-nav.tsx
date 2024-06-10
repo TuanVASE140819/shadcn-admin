@@ -12,6 +12,13 @@ import {
 } from '@/components/ui/dropdown-menu'
 
 export function UserNav() {
+
+  const handleLogout = () => {
+    localStorage.clear()
+    // reload the page
+    window.location.reload()
+  }
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -48,7 +55,7 @@ export function UserNav() {
           <DropdownMenuItem>New Team</DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
+        <DropdownMenuItem onClick={() => handleLogout()}>
           Log out
           <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
         </DropdownMenuItem>

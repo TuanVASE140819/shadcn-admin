@@ -28,7 +28,7 @@ import { DataTableToolbar } from '../components/data-table-toolbar'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
-  data: TData[]
+  data: TData[] /* TData[] | (() => Promise<TData[]>) | (() => Promise<{ data: TData[]; total: number }>) */
 }
 
 export function DataTable<TData, TValue>({
@@ -78,10 +78,10 @@ export function DataTable<TData, TValue>({
                     <TableHead key={header.id} colSpan={header.colSpan}>
                       {header.isPlaceholder
                         ? null
-                        : flexRender(
-                            header.column.columnDef.header,
+                        : (flexRender(
+                            header.column.columnDef.header as React.ReactNode,
                             header.getContext()
-                          )}
+                          ) as React.ReactNode)}
                     </TableHead>
                   )
                 })}
@@ -96,12 +96,7 @@ export function DataTable<TData, TValue>({
                   data-state={row.getIsSelected() && 'selected'}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
+                    <TableCell key={cell.id}>{cell.getValue()}</TableCell>
                   ))}
                 </TableRow>
               ))
